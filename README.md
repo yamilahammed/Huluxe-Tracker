@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Huluxe Delivery Tracker
 
-## Getting Started
+A delivery tracking system for staff and authorizers.
 
-First, run the development server:
+## Features
+
+- ✅ Staff page: Morning run form, Check-in/out, Evening report
+- ✅ Authorizer page: View/authorize runs, Manage users, Settings
+- ✅ Vehicle selection with exclusive booking
+- ✅ Google Sheets sync on authorization
+- ✅ Email alerts for late check-in & delivery shortfall
+- ✅ 12-hour IST time format
+
+## Deploy to Vercel
+
+### Step 1: Push to GitHub
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/YOUR_USERNAME/huluxe-tracker.git
+git push -u origin main
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Step 2: Import to Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Go to [vercel.com](https://vercel.com)
+2. Click "Add New" → "Project"
+3. Import your GitHub repository
+4. Click "Deploy"
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Step 3: Add Environment Variables
 
-## Learn More
+In Vercel dashboard → Settings → Environment Variables, add:
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Value |
+|----------|-------|
+| `DATABASE_URL` | `postgresql://neondb_owner:npg_JBEznXRGq72x@ep-snowy-bonus-a4vzrd1x-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require` |
+| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | `pk_test_b3B0aW11bS1kYXNzaWUtNzAuY2xlcmsuYWNjb3VudHMuZGV2JA` |
+| `CLERK_SECRET_KEY` | `sk_test_wAlQhnDBw2yxHvfO1dJlSg9FfLFs4EjaVutgQrWWZZ` |
+| `NEXT_PUBLIC_CLERK_SIGN_IN_URL` | `/sign-in` |
+| `NEXT_PUBLIC_CLERK_SIGN_UP_URL` | `/sign-up` |
+| `RESEND_API_KEY` | `re_J5WZyJDE_Kr6W1D3NJy7ZqkRLctFBy22i` |
+| `ADMIN_EMAIL` | `huluxemarketing@gmail.com` |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Step 4: Update Clerk Settings
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Go to [Clerk Dashboard](https://dashboard.clerk.com)
+2. Add your Vercel URL to allowed origins
+3. Update redirect URLs if needed
 
-## Deploy on Vercel
+### Step 5: Redeploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+After adding environment variables, click "Redeploy" in Vercel.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Local Development
+
+```bash
+npm install
+npx prisma generate
+npm run dev
+```
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- Tailwind CSS + shadcn/ui
+- PostgreSQL (Neon)
+- Prisma ORM
+- Clerk Authentication
+- Resend Email
+- React Query

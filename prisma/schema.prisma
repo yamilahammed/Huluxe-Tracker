@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  name      String
+  email     String?
+  role      Role     @default(STAFF)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  staffRuns      Run[] @relation("StaffRuns")
+  authorizedRuns Run[] @relation("AuthorizedRuns")
+}
+
+model Run {
+  id   String   @id @default(cuid())
+  date DateTime @db.Date
+
+  // Morning Plan
+  vehicleNo          String
+  area               String
+  plg                String
+  assignedShopCount  Int
+  driverName         String
+  deliveryPersonName String
+
+  // Check In/Out
+  checkinTime  DateTime?
+  checkoutTime DateTime?
+
+  // Evening Report
+  deliveredCount Int?
+  remarks        String?
+
+  // Status
+  status RunStatus @default(DRAFT)
+
+  // Relations
+  staffId      String
+  staff        User    @relation("StaffRuns", fields: [staffId], references: [id])
+  authorizerId String?
+  authorizer   User?   @relation("AuthorizedRuns", fields: [authorizerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([status])
+  @@index([staffId])
+}
+
+enum Role {
+  STAFF
+  AUTHORIZER
+  ADMIN
+}
+
+enum RunStatus {
+  DRAFT
+  IN_PROGRESS
+  SUBMITTED
+  AUTHORIZED
+  REJECTED
+}
