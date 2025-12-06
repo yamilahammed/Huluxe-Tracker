@@ -1,3 +1,0 @@
-Vercel is serving static files correctly!
-Time: 2025-12-05
-Middleware: Disabled
